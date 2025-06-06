@@ -37,7 +37,7 @@ async function checkForNewPairing() {
     const maxRank = Math.max(...rankingRounds);
 
     console.log(`📋 Board Pairings: Rd.${maxBoard}, Ranking List: Rd.${maxRank}, Last Notified: Rd.${lastNotifiedRound}`);
-    await sendNtfyNotification(`📢 New Pairing Published `);
+    // await sendNtfyNotification(`📢 New Pairing Published `);
 
 
     if (maxBoard > maxRank && maxBoard > lastNotifiedRound) {
