@@ -1,0 +1,73 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Chess Pairing Notifier</title>
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function () {
+      OneSignal.init({
+        appId: "1dd7effd-f2b7-4a1c-8310-656dde6d6978", // Your app ID
+        notifyButton: { enable: true },
+      });
+    });
+  </script>
+</head>
+<body>
+  <h2>♟️ Chess Notification Setup</h2>
+  <form id="notify-form">
+    <label for="fide">Enter your FIDE ID:</label><br>
+    <input type="text" id="fide" name="fide" required><br><br>
+
+    <label for="url">Enter your tournament URL:</label><br>
+    <input type="url" id="url" name="url" required><br><br>
+
+    <button type="submit">Subscribe</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    document.getElementById("notify-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const fideId = document.getElementById("fide").value.trim();
+      const tournamentUrl = document.getElementById("url").value.trim();
+
+      if (!fideId || !tournamentUrl) return;
+
+      document.getElementById("status").innerText = "🔄 Registering...";
+
+      OneSignal.push(async function () {
+        // Set external user ID
+        await OneSignal.setExternalUserId(fideId);
+        document.getElementById("status").innerText = "✅ You're subscribed! Notifications will be sent when pairings update.";
+
+        // Optionally store tournament URL to your backend or localStorage
+        localStorage.setItem("tournamentUrl", tournamentUrl);
+        localStorage.setItem("fideId", fideId);
+      });
+    });
+  </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OneSignal Notification Test</title>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+          await OneSignal.init({
+              appId: "1dd7effd-f2b7-4a1c-8310-656dde6d6978",
+            });
+        });
+        </script>
+        <div class='onesignal-customlink-container'></div>
+</head>
+<body>
+  <h2>📱 OneSignal Push Notification Test</h2>
+  <p>Click "Allow" when prompted to enable push notifications on your mobile.</p>
+</body>
+</html>
