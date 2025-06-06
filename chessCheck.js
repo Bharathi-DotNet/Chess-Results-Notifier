@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-// Command line arguments
+// Get user inputs from command line arguments
 const args = process.argv.slice(2);
 const url = args[0];
 const fideId = args[1];
@@ -10,10 +10,8 @@ if (!url || !fideId) {
   process.exit(1);
 }
 
-// Replace with your OneSignal details
-const oneSignalAppId = "1dd7effd-f2b7-4a1c-8310-656dde6d6978";
-const oneSignalApiKey = "os_v2_app_dxl677psw5fbzayqmvw543ljpbqfvpkjyqnua2fc4tiycax4rd63mfh5x7yr5boqxjbtgenrxtvglbvcpldnnmzw34az6mffwdbvvjq";
-
+// Use FIDE ID as the user's unique topic
+const ntfyTopic = fideId.toLowerCase();
 let lastNotifiedRound = 0;
 
 async function checkForNewPairing() {
@@ -39,39 +37,31 @@ async function checkForNewPairing() {
     const maxRank = Math.max(...rankingRounds);
 
     console.log(`📋 Board Pairings: Rd.${maxBoard}, Ranking List: Rd.${maxRank}, Last Notified: Rd.${lastNotifiedRound}`);
-    await sendOneSignalNotification(`📢 New Pairing Published for Round`);
+    await sendNtfyNotification(`📢 New Pairing Published `);
+
 
     if (maxBoard > maxRank && maxBoard > lastNotifiedRound) {
       console.log("🎉 New round pairing published!");
       lastNotifiedRound = maxBoard;
-      await sendOneSignalNotification(`📢 New Pairing Published for Round ${maxBoard}`);
+      await sendNtfyNotification(`📢 New Pairing Published for Round ${maxBoard}`);
     }
   } catch (err) {
     console.error("⚠️ Error:", err.message);
   }
 }
 
-async function sendOneSignalNotification(message) {
-  const response = await fetch("https://onesignal.com/api/v1/notifications", {
+async function sendNtfyNotification(message) {
+  const url = `https://ntfy.sh/${ntfyTopic}`;
+
+  const res = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      "Authorization": `Basic ${oneSignalApiKey}`
-    },
-    body: JSON.stringify({
-      app_id: oneSignalAppId,
-      include_external_user_ids: [fideId], // The user ID should be same as the app's registered external user ID
-      headings: { en: "♟️ Chess Update" },
-      contents: { en: message }
-    })
+    body: message
   });
 
-  const result = await response.json();
-
-  if (response.ok) {
-    console.log("✅ OneSignal notification sent:", result.id);
+  if (res.ok) {
+    console.log("✅ ntfy notification sent!");
   } else {
-    console.error("❌ OneSignal Error:", result.errors || result);
+    console.error("❌ Failed to send ntfy notification:", await res.text());
   }
 }
 
